@@ -7,7 +7,7 @@ const config: ConnectionOptions = {
   username: 'admin',
   password: 'password',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: true,
+  migrations: [__dirname + '/migrations/*{.ts,.js}'],
 };
 
 export default config;
