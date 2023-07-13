@@ -6,7 +6,8 @@ import { UserEntity } from './user.entity';
 import { sign } from 'jsonwebtoken';
 import { JWT_SECRET } from '@app/config';
 import { UserResponseInterface } from './types/userResponce.interface';
-
+import { LoginDto } from './dto/login.dto';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(
@@ -14,8 +15,8 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const existingUser = this.userRepository.findOne({
+  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const existingUser = await this.userRepository.findOne({
       where: [
         { username: createUserDto.username },
         { email: createUserDto.email },
@@ -50,5 +51,39 @@ export class UserService {
         token: this.generateJWT(user),
       },
     };
+  }
+  async login(loginDto: LoginDto): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: { email: loginDto.email },
+      select: ['id', 'username', 'email', 'bio', 'image', 'password'],
+    });
+
+    if (!user) {
+      throw new HttpException(
+        'Invalid email or password',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
+    if (!isPasswordCorrect) {
+      throw new HttpException(
+        'Invalid email or password',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    delete user.password;
+
+    return user;
+  }
+
+  async findById(id: number): Promise<UserEntity> {
+    return this.userRepository.findOne({
+      where: { id },
+    });
   }
 }
