@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Post,
-  Req,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -11,8 +10,6 @@ import { CreateUserDto } from './dto/createUser.dto';
 import { LoginDto } from './dto/login.dto';
 import { UserResponseInterface } from './types/userResponce.interface';
 import { UserService } from './user.service';
-import { Request } from 'express';
-import { ExpressRequestInterface } from '@app/types/expressRequest.interface';
 import { User } from '@app/decorators/user.decorator';
 import { UserEntity } from './user.entity';
 
