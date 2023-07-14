@@ -6,8 +6,14 @@ import { TagModule } from './tag/tag.module';
 import { UserModule } from './user/user.module';
 import config from './ormconfig';
 import { AuthMiddleware } from './middleware/auth.middleware';
+import { ArticleModule } from './article/article.module';
 @Module({
-  imports: [TagModule, TypeOrmModule.forRoot(config), UserModule],
+  imports: [
+    TagModule,
+    TypeOrmModule.forRoot(config),
+    UserModule,
+    ArticleModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

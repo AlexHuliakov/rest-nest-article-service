@@ -87,7 +87,7 @@ export class UserService {
       where: { id },
     });
   }
-  
+
   updateUser(user: UserEntity, updateUserDto: UpdateUserDto) {
     return this.userRepository.save({
       ...user,
