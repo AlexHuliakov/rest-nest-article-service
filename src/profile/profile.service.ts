@@ -35,6 +35,7 @@ export class ProfileService {
   buildProfileResponse(profile: ProfileType) {
     delete profile.email;
     delete profile.followers;
+    delete profile.follows;
 
     return { profile };
   }
@@ -63,7 +64,18 @@ export class ProfileService {
       user.followers.push(
         await this.userRepository.findOne({ where: { id: currentUserId } }),
       );
+      
+      const currentUser = await this.userRepository.findOne({
+        where: { id: currentUserId },
+        relations: ['follows'],
+      });
+      
+      currentUser.follows.push(
+        await this.userRepository.findOne({ where: { id: user.id } }),
+      );
+      
       await this.userRepository.save(user);
+      await this.userRepository.save(currentUser);
     }
 
     return { ...user, following: true };
@@ -96,8 +108,18 @@ export class ProfileService {
       user.followers = user.followers.filter(
         (follower) => follower.id !== currentUserId,
       );
-
+      
+      const currentUser = await this.userRepository.findOne({
+        where: { id: currentUserId },
+        relations: ['follows'],
+      });
+      
+      currentUser.follows = currentUser.follows.filter(
+        (follow) => follow.id !== user.id,
+      );
+      
       await this.userRepository.save(user);
+      await this.userRepository.save(currentUser);
     }
 
     return { ...user, following: false };

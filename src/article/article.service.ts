@@ -84,6 +84,41 @@ export class ArticleService {
     return { articles: articlesWithFavorites, articlesCount };
   }
 
+  async getFeed(
+    userId: number,
+    query: any,
+  ): Promise<ArticlesResponseInterface> {
+    const follows = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['follows'],
+    });
+
+    if (follows.follows.length === 0) {
+      return { articles: [], articlesCount: 0 };
+    }
+
+    const ids = follows.follows.map((el) => el.id);
+
+    const queryBuilder = this.articleRepository
+      .createQueryBuilder('articles')
+      .leftJoinAndSelect('articles.author', 'author')
+      .where('articles.authorId IN (:...ids)', { ids });
+
+    const articlesCount = await queryBuilder.getCount();
+    queryBuilder.orderBy('articles.createdAt', 'DESC');
+
+    if (query.limit) {
+      queryBuilder.limit(query.limit);
+    }
+
+    if (query.offset) {
+      queryBuilder.offset(query.offset);
+    }
+
+    const articles = await queryBuilder.getMany();
+    return { articles, articlesCount };
+  }
+
   createArticle(
     user: UserEntity,
     createArticleDto: CreateArticleDto,

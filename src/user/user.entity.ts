@@ -45,4 +45,8 @@ export class UserEntity {
   @ManyToMany(() => UserEntity)
   @JoinTable()
   followers: UserEntity[];
+  
+  @ManyToMany(() => UserEntity)
+  @JoinTable()
+  follows: UserEntity[];
 }

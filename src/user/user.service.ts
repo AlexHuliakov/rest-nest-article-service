@@ -17,6 +17,9 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const errorResponse = {
+      errors: {},
+    };
     const existingUser = await this.userRepository.findOne({
       where: [
         { username: createUserDto.username },
@@ -25,10 +28,12 @@ export class UserService {
     });
 
     if (existingUser) {
-      throw new HttpException(
-        'User already exists',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      errorResponse.errors['username'] = 'has already been taken';
+      errorResponse.errors['email'] = 'has already been taken';
+    }
+
+    if (existingUser) {
+      throw new HttpException(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     const user = new UserEntity();
@@ -54,16 +59,18 @@ export class UserService {
     };
   }
   async login(loginDto: LoginDto): Promise<UserEntity> {
+    const errorResponse = {
+      errors: {},
+    };
+
     const user = await this.userRepository.findOne({
       where: { email: loginDto.email },
       select: ['id', 'username', 'email', 'bio', 'image', 'password'],
     });
 
     if (!user) {
-      throw new HttpException(
-        'Invalid email or password',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      errorResponse.errors['email or password'] = 'is invalid';
+      throw new HttpException(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     const isPasswordCorrect = await bcrypt.compare(
@@ -71,10 +78,8 @@ export class UserService {
       user.password,
     );
     if (!isPasswordCorrect) {
-      throw new HttpException(
-        'Invalid email or password',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      errorResponse.errors['email or password'] = 'is invalid';
+      throw new HttpException(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     delete user.password;
