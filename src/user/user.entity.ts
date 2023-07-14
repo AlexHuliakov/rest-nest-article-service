@@ -2,6 +2,8 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -35,4 +37,12 @@ export class UserEntity {
 
   @OneToMany(() => ArticleEntity, (article: ArticleEntity) => article.author)
   articles: ArticleEntity[];
+
+  @ManyToMany(() => ArticleEntity)
+  @JoinTable()
+  favorites: ArticleEntity[];
+  
+  @ManyToMany(() => UserEntity)
+  @JoinTable()
+  followers: UserEntity[];
 }
