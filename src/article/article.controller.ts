@@ -14,7 +14,6 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { query } from 'express';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/createArticle.dto';
 import { ArticleResponseInterface } from './types/articleResponce.interface';
@@ -31,11 +30,14 @@ export class ArticleController {
   ): Promise<ArticlesResponseInterface> {
     return await this.articleService.findAll(currentUserId, query);
   }
-  
+
   @Get('/feed')
   @UseGuards(AuthGuard)
-  getFeed(@User('id') currentUserId: number, @Query() query: any): Promise<ArticlesResponseInterface> {
-    return this.articleService.getFeed(currentUserId, query); 
+  getFeed(
+    @User('id') currentUserId: number,
+    @Query() query: any,
+  ): Promise<ArticlesResponseInterface> {
+    return this.articleService.getFeed(currentUserId, query);
   }
 
   @Post()

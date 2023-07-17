@@ -9,15 +9,10 @@ export class ProfileController {
 
   @Get(':username')
   async findOne(
-    @Param('id') id: string,
     @User('id') currentUserId: number,
     @Param('username') username: string,
   ): Promise<ProfileResponseInerface> {
-    const profile = await this.profileService.findOne(
-      +id,
-      currentUserId,
-      username,
-    );
+    const profile = await this.profileService.findOne(currentUserId, username);
     return this.profileService.buildProfileResponse(profile);
   }
 

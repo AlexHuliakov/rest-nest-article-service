@@ -16,13 +16,16 @@ export class BackendValidationPipe implements PipeTransform {
       return value;
     }
 
-    throw new HttpException({ errors: this.formatErrors(errors) }, HttpStatus.UNPROCESSABLE_ENTITY);
+    throw new HttpException(
+      { errors: this.formatErrors(errors) },
+      HttpStatus.UNPROCESSABLE_ENTITY,
+    );
   }
 
   formatErrors(errors: ValidationError[]) {
     return errors.reduce((acc, error) => {
       acc[error.property] = Object.values(error.constraints);
-        return acc;
+      return acc;
     }, {});
   }
 }

@@ -11,11 +11,7 @@ export class ProfileService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async findOne(
-    id: number,
-    currentUserId: number,
-    username: string,
-  ): Promise<ProfileType> {
+  async findOne(currentUserId: number, username: string): Promise<ProfileType> {
     const profile = await this.userRepository.findOne({
       where: { username },
       relations: ['followers'],
@@ -64,16 +60,16 @@ export class ProfileService {
       user.followers.push(
         await this.userRepository.findOne({ where: { id: currentUserId } }),
       );
-      
+
       const currentUser = await this.userRepository.findOne({
         where: { id: currentUserId },
         relations: ['follows'],
       });
-      
+
       currentUser.follows.push(
         await this.userRepository.findOne({ where: { id: user.id } }),
       );
-      
+
       await this.userRepository.save(user);
       await this.userRepository.save(currentUser);
     }
@@ -108,16 +104,16 @@ export class ProfileService {
       user.followers = user.followers.filter(
         (follower) => follower.id !== currentUserId,
       );
-      
+
       const currentUser = await this.userRepository.findOne({
         where: { id: currentUserId },
         relations: ['follows'],
       });
-      
+
       currentUser.follows = currentUser.follows.filter(
         (follow) => follow.id !== user.id,
       );
-      
+
       await this.userRepository.save(user);
       await this.userRepository.save(currentUser);
     }

@@ -41,11 +41,11 @@ export class UserEntity {
   @ManyToMany(() => ArticleEntity)
   @JoinTable()
   favorites: ArticleEntity[];
-  
+
   @ManyToMany(() => UserEntity)
   @JoinTable()
   followers: UserEntity[];
-  
+
   @ManyToMany(() => UserEntity)
   @JoinTable()
   follows: UserEntity[];
