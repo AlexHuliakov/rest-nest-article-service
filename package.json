@@ -21,10 +21,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/ormdatasource.ts",
-    "db:drop": "npm run typeorm schema:drop",
-    "db:create": "npm run typeorm migration:generate",
-    "db:migrate": "npm run typeorm migration:run",
-    "db:seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/ormseeddatasource.ts migration:run"
+    "db:drop": "dotenv run npm run typeorm schema:drop",
+    "db:create": "dotenv run npm run typeorm migration:generate",
+    "db:migrate": "dotenv run npm run typeorm migration:run",
+    "db:seed": "dotenv run ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/ormseeddatasource.ts migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
