@@ -4,13 +4,16 @@
   "description": "",
   "author": "",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:dev": "nodemon",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "ls; ls dist; node dist/main.js",
+    "start:prod": "node dist/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
