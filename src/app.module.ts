@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,8 +12,15 @@ import { ProfileModule } from './profile/profile.module';
 import { CommentModule } from './comment/comment.module';
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
+      expandVariables: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      useFactory: config,
+    }),
     TagModule,
-    TypeOrmModule.forRoot(config),
     UserModule,
     ArticleModule,
     ProfileModule,

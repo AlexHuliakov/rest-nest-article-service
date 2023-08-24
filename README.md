@@ -15,13 +15,21 @@ All routes are made according to [RealWorld API Spec](https://realworld-docs.net
     ```bash
     $ docker-compose up -d
     ```
+    
+3. Fill `.env` file:
+    ```
+    DB_HOST="localhost"
+    DB_NAME="nest-article"
+    DB_USERNAME="admin"
+    DB_PASSWORD="password"
+    ```
 
-3. Migrate and the database
+4. Migrate and the database
     ```bash
     $ npm run db:migrate
     ```
 
-4. (Optional) Seed the database with some data
+5. (Optional) Seed the database with some data
     ```bash
     $ npm run db:seed
     ```
