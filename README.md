@@ -22,6 +22,7 @@ All routes are made according to [RealWorld API Spec](https://realworld-docs.net
     DB_NAME="nest-article"
     DB_USERNAME="admin"
     DB_PASSWORD="password"
+    PORT=3000
     ```
 
 4. Migrate and the database
