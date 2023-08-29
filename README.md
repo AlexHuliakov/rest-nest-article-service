@@ -46,3 +46,6 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Deploy
+
+The app is deployed using [adaptable.io](adaptable.io) and can be accessed via `https://article-service.adaptable.app`.
