@@ -9,7 +9,7 @@
   },
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "nest build; npm run db:migrate; npm run db:seed",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:dev": "nodemon",
     "start:debug": "nest start --debug --watch",
@@ -24,7 +24,8 @@
     "db:drop": "dotenv -- npm run typeorm schema:drop",
     "db:create": "dotenv -- npm run typeorm migration:generate",
     "db:migrate": "dotenv -- npm run typeorm migration:run",
-    "db:seed": "dotenv -- ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/ormseeddatasource.ts migration:run"
+    "db:seed": "dotenv -- ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/ormseeddatasource.ts migration:run", 
+    "start": "npm run start:prod"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
